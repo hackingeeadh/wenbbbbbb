@@ -170,5 +170,65 @@
     });
   </script>
 
+<script>
+// crear partículas
+const particles = [];
+const particleCount = 80;
+
+function spawnParticle() {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  document.body.appendChild(p);
+
+  const size = Math.random() * 4 + 2;
+  p.style.position = 'fixed';
+  p.style.borderRadius = '50%';
+  p.style.background = 'white';
+  p.style.opacity = '0.8';
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.pointerEvents = 'none';
+
+  const obj = {
+    el: p,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3
+  };
+  particles.push(obj);
+}
+for (let i = 0; i < particleCount; i++) spawnParticle();
+
+function animateParticles() {
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+    if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+    p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// repulsión en click
+window.addEventListener('click', (e) => {
+  const mx = e.clientX;
+  const my = e.clientY;
+  const radius = 120;
+
+  particles.forEach(p => {
+    const dx = p.x - mx;
+    const dy = p.y - my;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < radius) {
+      const force = (radius - dist) / radius;
+      p.vx += (dx / dist) * force * 2;
+      p.vy += (dy / dist) * force * 2;
+    }
+  });
+});
+</script>
 </body>
 </html>
