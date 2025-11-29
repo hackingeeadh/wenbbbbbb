@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hersun</title>
+
   <style>
     body {
       margin: 0;
@@ -25,19 +27,19 @@
       z-index: -3;
     }
 
-    /* CAPA OSCURA + BLUR GLOBAL */
+    /* CAPA OSCURA */
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0,0,0,0.25);
       backdrop-filter: blur(4px);
       z-index: -2;
     }
 
-    /* TARJETA SEMI-TRANSPARENTE DETRÁS DEL TEXTO */
+    /* TARJETA DETRÁS DEL TEXTO */
     .card {
       background: rgba(0,0,0,0.45);
       padding: 40px 60px;
@@ -47,7 +49,6 @@
       animation: fadeIn 2s ease;
     }
 
-    /* CONTENIDO */
     .content {
       position: relative;
       z-index: 10;
@@ -58,7 +59,6 @@
       gap: 10px;
     }
 
-    /* TITULO CON ANIMACIÓN */
     .title {
       font-size: 60px;
       font-weight: 700;
@@ -66,14 +66,12 @@
       animation: float 3s infinite ease-in-out, glow 4s infinite ease-in-out;
     }
 
-    /* SUBTITULO */
     .subtitle {
       margin-top: -6px;
       font-size: 20px;
       opacity: 0.9;
     }
 
-    /* FRASE EXTRA */
     .subnote {
       font-size: 17px;
       opacity: 0.85;
@@ -86,29 +84,25 @@
       50% { transform: translateY(-10px); }
       100% { transform: translateY(0); }
     }
-
     @keyframes glow {
       0% { text-shadow: 0 0 5px white; }
       50% { text-shadow: 0 0 15px white; }
       100% { text-shadow: 0 0 5px white; }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* PARTÍCULAS */
+    /* PARTICULAS */
     .particle {
       position: fixed;
-      width: 6px;
-      height: 6px;
-      background: white;
       border-radius: 50%;
-      opacity: 0.7;
+      background: white;
+      opacity: 0.8;
       pointer-events: none;
-      transition: transform 0.4s ease;
       z-index: -1;
+      transition: transform 0.2s ease-out;
     }
   </style>
 </head>
@@ -128,63 +122,62 @@
     </div>
   </div>
 
-  <script>
-// CONFIG
-const PARTICLE_COUNT = 80;
-const SPEED = 0.4;
-const CLICK_RADIUS = 140;
+<script>
+/* --------------------
+      PARTICULAS
+---------------------- */
 
 const particles = [];
+const COUNT = 80;
+const SPEED = 0.25;
+const CLICK_RADIUS = 150;
 
-function createParticle() {
-  const div = document.createElement('div');
-  div.className = 'particle-custom';
-  document.body.appendChild(div);
+// Crear partículas
+for (let i = 0; i < COUNT; i++) {
+  const p = document.createElement("div");
+  p.className = "particle";
 
-  const size = Math.random() * 3 + 2;
-  div.style.position = 'fixed';
-  div.style.width = size + 'px';
-  div.style.height = size + 'px';
-  div.style.borderRadius = '50%';
-  div.style.background = 'white';
-  div.style.opacity = '0.9';
-  div.style.pointerEvents = 'none';
+  const size = Math.random() * 4 + 2;
+  p.style.width = size + "px";
+  p.style.height = size + "px";
 
-  const p = {
-    el: div,
+  document.body.appendChild(p);
+
+  particles.push({
+    el: p,
     x: Math.random() * innerWidth,
     y: Math.random() * innerHeight,
     vx: (Math.random() - 0.5) * SPEED,
     vy: (Math.random() - 0.5) * SPEED
-  };
-  particles.push(p);
+  });
 }
 
-for (let i = 0; i < PARTICLE_COUNT; i++) createParticle();
-
+// Animación
 function animate() {
   particles.forEach(p => {
     p.x += p.vx;
     p.y += p.vy;
 
+    // rebotar bordes
     if (p.x < 0 || p.x > innerWidth) p.vx *= -1;
     if (p.y < 0 || p.y > innerHeight) p.vy *= -1;
 
     p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
   });
+
   requestAnimationFrame(animate);
 }
 animate();
 
-// CLICK REPULSION SOLO CERCA
-addEventListener('click', e => {
+// Click con repulsión suave
+addEventListener("click", e => {
   const mx = e.clientX;
   const my = e.clientY;
 
   particles.forEach(p => {
     const dx = p.x - mx;
     const dy = p.y - my;
-    const dist = Math.sqrt(dx*dx + dy*dy);
+    const dist = Math.sqrt(dx * dx + dy * dy);
 
     if (dist < CLICK_RADIUS) {
       const force = (CLICK_RADIUS - dist) / CLICK_RADIUS;
@@ -195,65 +188,5 @@ addEventListener('click', e => {
 });
 </script>
 
-<script>
-// crear partículas
-const particles = [];
-const particleCount = 80;
-
-function spawnParticle() {
-  const p = document.createElement('div');
-  p.className = 'particle';
-  document.body.appendChild(p);
-
-  const size = Math.random() * 4 + 2;
-  p.style.position = 'fixed';
-  p.style.borderRadius = '50%';
-  p.style.background = 'white';
-  p.style.opacity = '0.8';
-  p.style.width = size + 'px';
-  p.style.height = size + 'px';
-  p.style.pointerEvents = 'none';
-
-  const obj = {
-    el: p,
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.3,
-    vy: (Math.random() - 0.5) * 0.3
-  };
-  particles.push(obj);
-}
-for (let i = 0; i < particleCount; i++) spawnParticle();
-
-function animateParticles() {
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
-    if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
-    p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
-  });
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-// repulsión en click
-window.addEventListener('click', (e) => {
-  const mx = e.clientX;
-  const my = e.clientY;
-  const radius = 120;
-
-  particles.forEach(p => {
-    const dx = p.x - mx;
-    const dy = p.y - my;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < radius) {
-      const force = (radius - dist) / radius;
-      p.vx += (dx / dist) * force * 2;
-      p.vy += (dy / dist) * force * 2;
-    }
-  });
-});
-</script>
 </body>
 </html>
