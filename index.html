@@ -41,11 +41,12 @@
     /* TARJETA DETRÁS DEL TEXTO */
     .card {
       background: rgba(0,0,0,0.45);
-      padding: 40px 60px;
+      padding: 5vw 8vw;
       border-radius: 20px;
       backdrop-filter: blur(6px);
       box-shadow: 0 0 25px rgba(0,0,0,0.6);
       animation: fadeIn 2s ease;
+      max-width: 90%;
     }
 
     .content {
@@ -59,7 +60,7 @@
     }
 
     .title {
-      font-size: 60px;
+      font-size: 10vw; /* escala según ancho de pantalla */
       font-weight: 700;
       letter-spacing: 3px;
       animation: float 3s infinite ease-in-out, glow 4s infinite ease-in-out;
@@ -67,14 +68,27 @@
 
     .subtitle {
       margin-top: -6px;
-      font-size: 20px;
+      font-size: 4vw;
       opacity: 0.9;
     }
 
     .subnote {
-      font-size: 17px;
+      font-size: 3.5vw;
       opacity: 0.85;
       margin-top: 4px;
+    }
+
+    /* LINK */
+    .subnote a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 6px 10px;
+      display: inline-block;
+    }
+
+    .subnote a:hover {
+      text-decoration: underline;
     }
 
     /* ANIMACIONES */
@@ -102,20 +116,22 @@
       pointer-events: none;
       z-index: -1;
       transition: transform 0.2s ease-out;
+    }
 
-<style>
-  /* Tu CSS existente... */
-  
-  .subnote a {
-    color: white;          /* color blanco */
-    text-decoration: none;  /* quita subrayado */
-    font-weight: bold;      /* opcional, que resalte */
-  }
+    /* MEDIA QUERIES PARA MÓVILES */
+    @media (max-width: 600px) {
+      .content {
+        margin-top: 10vh;
+      }
+      .card {
+        padding: 6vw 5vw;
+      }
+      .title {
+        letter-spacing: 1px;
+      }
+    }
 
-  .subnote a:hover {
-    text-decoration: underline; /* subraya al pasar el mouse */
-  }
-</style>
+  </style>
 </head>
 <body>
 
@@ -128,7 +144,7 @@
 <div class="content">
   <div class="card">
     <h1 class="title">Hersun</h1>
-    <p class="subtitle"> Bienvenido pibe, esto solo es un test.</p>
+    <p class="subtitle">Bienvenido pibe, esto solo es un test.</p>
     <p class="subnote">
       <a href="https://discord.gg/wdjB3G9sHh" target="_blank">Discord aquí</a>
     </p>
@@ -142,7 +158,7 @@
 ---------------------- */
 
 const particles = [];
-const COUNT = 80;
+const COUNT = window.innerWidth < 600 ? 40 : 80; // menos partículas en móvil
 const SPEED = 0.25;
 const CLICK_RADIUS = 150;
 
@@ -200,6 +216,7 @@ addEventListener("click", e => {
     }
   });
 });
+
 </script>
 
 </body>
