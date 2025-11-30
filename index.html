@@ -15,7 +15,6 @@
       text-align: center;
     }
 
-    /* VIDEO DE FONDO */
     .video-bg {
       position: fixed;
       top: 0;
@@ -26,7 +25,6 @@
       z-index: -3;
     }
 
-    /* CAPA OSCURA */
     .overlay {
       position: fixed;
       top: 0;
@@ -38,7 +36,6 @@
       z-index: -2;
     }
 
-    /* TARJETA DETRÁS DEL TEXTO */
     .card {
       background: rgba(0,0,0,0.45);
       padding: 40px 60px;
@@ -46,12 +43,6 @@
       backdrop-filter: blur(6px);
       box-shadow: 0 0 25px rgba(0,0,0,0.6);
       animation: fadeIn 2s ease;
-      transition: box-shadow .4s ease;
-    }
-
-    /* ✔ sombra glow suave del card */
-    body.scrolled .card {
-      box-shadow: 0 0 40px rgba(255,255,255,0.13);
     }
 
     .content {
@@ -61,52 +52,43 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
     }
 
     .title {
       font-size: 60px;
       font-weight: 700;
       letter-spacing: 3px;
-      animation: float 3s infinite ease-in-out, glow 4s infinite ease-in-out, pulse 4s infinite ease-in-out;
+      animation: float 3s infinite ease-in-out,
+                 glow 4s infinite ease-in-out,
+                 pulse 4s infinite ease-in-out;
     }
 
-    /* ✔ pulso elegante tipo breathing */
     @keyframes pulse {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.03); }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
       100% { transform: scale(1); }
     }
 
-    .subtitle {
-      margin-top: -6px;
-      font-size: 20px;
-      opacity: 0.9;
-    }
-
-    .subnote {
-      font-size: 17px;
-      opacity: 0.85;
-      margin-top: 4px;
-    }
-
-    /* ANIMACIONES */
     @keyframes float {
       0% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
       100% { transform: translateY(0); }
     }
+
     @keyframes glow {
       0% { text-shadow: 0 0 5px white; }
       50% { text-shadow: 0 0 15px white; }
       100% { text-shadow: 0 0 5px white; }
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* PARTICULAS */
+    /* --------------------
+        PARTICULAS
+    ---------------------- */
     .particle {
       position: fixed;
       border-radius: 50%;
@@ -114,21 +96,28 @@
       opacity: 0.8;
       pointer-events: none;
       z-index: -1;
-      transition: transform 0.2s ease-out;
     }
 
-    /* ---------------- */
-    /* ENLACE */
-    /* ---------------- */
-
-    .subnote a {
+    /* --------------------
+        BOTÓN ENTRAR
+    ---------------------- */
+    .enter-btn {
+      margin-top: 14px;
+      padding: 12px 26px;
+      background: rgba(255,255,255,0.17);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.28);
       color: white;
-      text-decoration: none;
+      border-radius: 12px;
+      font-size: 17px;
       font-weight: bold;
+      cursor: pointer;
+      transition: .25s ease;
     }
 
-    .subnote a:hover {
-      text-decoration: underline;
+    .enter-btn:hover {
+      background: rgba(255,255,255,0.28);
+      transform: scale(1.04);
     }
   </style>
 </head>
@@ -143,26 +132,23 @@
 <div class="content">
   <div class="card">
     <h1 class="title">Hersun</h1>
-    <p class="subtitle"> Bienvenido pibe, esto solo es un test.</p>
-    <p class="subnote">
-      <a href="https://discord.gg/wdjB3G9sHh" target="_blank">Discord aquí</a>
-    </p>
+    <p class="subtitle">Bienvenido pibe, esto solo es un test.</p>
+
+    <!-- BOTÓN A LA SIGUIENTE PARTE -->
+    <button class="enter-btn">Entrar</button>
   </div>
 </div>
 
 <script>
-
 /* --------------------
       PARTICULAS
 ---------------------- */
 
 const particles = [];
-const COUNT = 80;
-const SPEED = 0.25;
-const CLICK_RADIUS = 150;
+const COUNT = 100; // más partículas visibles en todo el espacio
+const SPEED = 0.35;
 let mouseX = 0, mouseY = 0;
 
-// Crear partículas
 for (let i = 0; i < COUNT; i++) {
   const p = document.createElement("div");
   p.className = "particle";
@@ -182,29 +168,28 @@ for (let i = 0; i < COUNT; i++) {
   });
 }
 
-// Guardar posición del mouse
 addEventListener("mousemove", e => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
 
-// Animación
 function animate() {
   particles.forEach(p => {
     p.x += p.vx;
     p.y += p.vy;
 
-    // rebotar bordes
+    // Rebotan perfectamente en los 4 bordes
     if (p.x < 0 || p.x > innerWidth) p.vx *= -1;
     if (p.y < 0 || p.y > innerHeight) p.vy *= -1;
 
-    // ✔ efecto hover (se alejan un poquito del mouse)
+    // Repulsión suave por hover
     const dx = p.x - mouseX;
     const dy = p.y - mouseY;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < 120) {
-      p.vx += dx / 4000;
-      p.vy += dy / 4000;
+
+    if (dist < 130) {
+      p.vx += dx / 4500;
+      p.vy += dy / 4500;
     }
 
     p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
@@ -212,31 +197,8 @@ function animate() {
 
   requestAnimationFrame(animate);
 }
+
 animate();
-
-// Click con repulsión suave
-addEventListener("click", e => {
-  const mx = e.clientX;
-  const my = e.clientY;
-
-  particles.forEach(p => {
-    const dx = p.x - mx;
-    const dy = p.y - my;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist < CLICK_RADIUS) {
-      const force = (CLICK_RADIUS - dist) / CLICK_RADIUS;
-      p.vx += (dx / (dist || 1)) * force * 2;
-      p.vy += (dy / (dist || 1)) * force * 2;
-    }
-  });
-});
-
-/* sombra del card si scrollea */
-addEventListener("scroll", () => {
-  if (scrollY > 10) document.body.classList.add("scrolled");
-  else document.body.classList.remove("scrolled");
-});
 </script>
 
 </body>
