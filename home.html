@@ -1,11 +1,190 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Segunda Parte</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hersun | Inicio</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="H.png">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* VIDEO DE FONDO */
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -3;
+    }
+
+    /* CAPA OSCURA */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(3px);
+      z-index: -2;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .section {
+      position: relative;
+      padding: 120px 15%;
+      z-index: 5;
+    }
+
+    /* TITULOS */
+    .title {
+      font-size: 60px;
+      font-weight: 700;
+      animation: float 3s infinite ease-in-out;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      opacity: 0.85;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* TARJETA DE TEXTO */
+    .card {
+      background: rgba(0,0,0,0.45);
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      animation: fadeIn 2s ease;
+    }
+
+    /* ANIMACIONES */
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --------------------
+        PARTICULAS (HOME)
+    ---------------------- */
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Acá empieza todo wachin </h1>
-  <p> Que significa el bro respeta hermano ya me tienen cansado.</p>
+
+<!-- VIDEO FONDO -->
+<video autoplay loop muted playsinline class="video-bg">
+  <source src="wondos.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- SECCIÓN PRINCIPAL -->
+<section class="section">
+  <h1 class="title">Hersun</h1>
+  <p class="subtitle">Inicio / Portfolio / Info</p>
+
+  <div class="card">
+    <h2>Sobre mí</h2>
+    <p>
+      Bienvenido pibe, acá empieza lo “serio”.  
+      Esta parte de la página va a ir mostrando información sobre mí, sobre mis proyectos,
+      y un poco sobre lo que hago.  
+      jeje.
+    </p>
+  </div>
+</section>
+
+<!-- SECCIÓN 2 -->
+<section class="section">
+  <div class="card">
+    <h2>Cosas que hago</h2>
+    <p>
+      Acá más adelante podés agregar:
+      <br><br>
+      - Tus proyectos<br>
+      - Sistemas que hiciste (Roblox, Discord, etc)<br>
+      - Cosas que editás<br>
+      - Info visual interactiva<br>
+      - O cualquier huevada divertida tuya
+      <br><br>
+      La idea es que el sitio parezca moderno, suave y con movimiento.
+    </p>
+  </div>
+</section>
+
+<script>
+/* --------------------
+     PARTICULAS HOME
+---------------------- */
+
+const particles = [];
+const COUNT = 70;
+const SPEED = 0.30;
+
+for (let i = 0; i < COUNT; i++) {
+  const p = document.createElement("div");
+  p.className = "particle";
+
+  const size = Math.random() * 3 + 2;
+  p.style.width = size + "px";
+  p.style.height = size + "px";
+
+  document.body.appendChild(p);
+
+  particles.push({
+    el: p,
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    vx: (Math.random() - 0.5) * SPEED,
+    vy: (Math.random() - 0.5) * SPEED
+  });
+}
+
+function animate() {
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+
+    if (p.x < 0 || p.x > innerWidth) p.vx *= -1;
+    if (p.y < 0 || p.y > innerHeight) p.vy *= -1;
+
+    p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
 </body>
 </html>
